@@ -4,7 +4,6 @@ import io.github.quantumfighter.cab222.model.Question;
 
 import com.google.gson.Gson;
 
-import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,6 +27,5 @@ public class QuestionLoader {
         } catch (IOException exception) {
             throw new UncheckedIOException("Could not read resource:" + resourcePath, exception);
         }
-        //return List.of();
     }
 }
