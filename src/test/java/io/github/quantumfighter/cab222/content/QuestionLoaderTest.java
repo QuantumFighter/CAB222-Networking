@@ -10,13 +10,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class QuestionLoaderTest {
 
     @Test
-    void loadsQuestionFromJsonResource()
-    {
+    void loadsQuestionFromJsonResource() {
         QuestionLoader loader = new QuestionLoader();
 
         List<Question> questions = loader.load("/fixtures/one-question.json");
 
-        assertEquals(1,questions.size());
+        assertEquals(1, questions.size());
 
         Question question = questions.getFirst();
 
@@ -24,5 +23,27 @@ class QuestionLoaderTest {
         assertEquals("W1-L2", question.lessonId());
         assertEquals(4, question.options().size());
         assertEquals("C", question.correctOptionId());
+    }
+
+    @Test
+    void loadsBothOsiLessonQuestions() {
+        QuestionLoader loader = new QuestionLoader();
+
+        List<Question> questions =
+                loader.load("/week1/w1-l2-questions.json");
+
+        assertEquals(2, questions.size());
+
+        for (Question question : questions) {
+            assertEquals("W1-L2", question.lessonId());
+            assertEquals(4, question.options().size());
+
+            long matchingOptions = question.options().stream()
+                    .filter(option ->
+                            option.id().equals(question.correctOptionId()))
+                    .count();
+
+            assertEquals(1L, matchingOptions);
+        }
     }
 }
