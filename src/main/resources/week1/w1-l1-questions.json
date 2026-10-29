@@ -1,1 +1,60 @@
-[]
+[
+  {
+    "id": "W1-Q1",
+    "lessonId": "W1-L1",
+    "prompt": "Several wired computers and a printer form a network within one small office. Which combination best describes the network scope and the device used to interconnect them?",
+    "options": [
+      {
+        "id": "A",
+        "text": "WAN and router",
+        "explanation": "A WAN connects networks across wider areas. A router forwards traffic between networks. This scenario describes connecting devices within one office network."
+      },
+      {
+        "id": "B",
+        "text": "LAN and switch",
+        "explanation": "Correct. A small office network is a LAN, and a switch interconnects its wired devices."
+      },
+      {
+        "id": "C",
+        "text": "MAN and wireless access point",
+        "explanation": "A MAN links networks across a metropolitan area. An access point provides wireless access, whereas this scenario specifies wired devices in one office."
+      },
+      {
+        "id": "D",
+        "text": "LAN and NIC",
+        "explanation": "LAN correctly describes the scope, but a NIC connects an individual device to the network. It does not interconnect all the office devices."
+      }
+    ],
+    "correctOptionId": "B",
+    "source": "CAB222 Week 1, Lecture 1 Introduction to Networks_v1.pdf, pages 10, 20 and 22."
+  },
+  {
+    "id": "W1-Q2",
+    "lessonId": "W1-L1",
+    "prompt": "Two separate IP networks need to exchange traffic. Which device's primary role is forwarding traffic between these networks?",
+    "options": [
+      {
+        "id": "A",
+        "text": "A standard Layer 2 Ethernet switch",
+        "explanation": "A standard Layer 2 switch forwards frames within a LAN. Routing between different IP networks requires a routing function."
+      },
+      {
+        "id": "B",
+        "text": "A wireless access point",
+        "explanation": "An access point provides wireless access to a network. Its primary role is not routing between separate IP networks."
+      },
+      {
+        "id": "C",
+        "text": "A router",
+        "explanation": "Correct. A router forwards traffic between different IP networks."
+      },
+      {
+        "id": "D",
+        "text": "An Ethernet cable",
+        "explanation": "A cable carries signals between connected devices. It does not inspect IP addresses or make routing decisions."
+      }
+    ],
+    "correctOptionId": "C",
+    "source": "CAB222 Week 1, Lecture 1 Introduction to Networks_v1.pdf, pages 21-22."
+  }
+]

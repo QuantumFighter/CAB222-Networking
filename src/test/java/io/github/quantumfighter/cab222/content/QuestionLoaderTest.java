@@ -1,5 +1,6 @@
 package io.github.quantumfighter.cab222.content;
 
+import io.github.quantumfighter.cab222.model.AnswerOption;
 import io.github.quantumfighter.cab222.model.Question;
 import org.junit.jupiter.api.Test;
 
@@ -38,6 +39,13 @@ class QuestionLoaderTest {
             assertEquals("W1-L2", question.lessonId());
             assertEquals(4, question.options().size());
 
+            long distinctOptionIds = question.options().stream()
+                    .map(AnswerOption::id)
+                    .distinct()
+                    .count();
+
+            assertEquals(4L, distinctOptionIds);
+
             long matchingOptions = question.options().stream()
                     .filter(option ->
                             option.id().equals(question.correctOptionId()))
@@ -59,6 +67,12 @@ class QuestionLoaderTest {
         for (Question question : questions) {
             assertEquals("W1-L3", question.lessonId());
             assertEquals(4, question.options().size());
+            long distinctOptionIds = question.options().stream()
+                    .map(AnswerOption::id)
+                    .distinct()
+                    .count();
+
+            assertEquals(4L, distinctOptionIds);
 
             long matchingOptions = question.options().stream()
                     .filter(option ->
@@ -82,6 +96,14 @@ class QuestionLoaderTest {
             assertEquals("W1-L1", question.lessonId());
             assertEquals(4, question.options().size());
 
+            long distinctOptionIds = question.options().stream()
+                    .map(AnswerOption::id)
+                    .distinct()
+                    .count();
+
+            assertEquals(4L, distinctOptionIds);
+
+            // Existing check: exactly one option matches the correct-answer ID.
             long matchingOptions = question.options().stream()
                     .filter(option ->
                             option.id().equals(question.correctOptionId()))
