@@ -1,0 +1,35 @@
+ID: W1-L3
+Title: Understanding encapsulation
+Learning outcome: Explain encapsulation and decapsulation, distinguish
+segments, packets and frames, and identify Ethernet addressing.
+Sources: CAB222 Week 1, Lecture 1 Introduction to Networks_v1.pdf,
+pages 13-15, 35-36, 40, 43, 46 and 49; Tutorial 1, Activity 4.
+
+Encapsulation adds protocol control information around data as it
+passes down a network stack. Think of placing a letter inside an
+addressed envelope: the envelope helps deliver the letter while
+preserving its contents.
+
+Consider application data sent using TCP over IPv4 over Ethernet.
+TCP adds a TCP header, producing a TCP segment. IPv4 carries that
+segment inside an IP packet and adds an IPv4 header, including source
+and destination IP addresses.
+
+Ethernet carries the IP packet inside a frame. Its header includes
+source and destination MAC addresses. Its trailer includes a frame
+check sequence used to detect transmission errors. Information added
+before the enclosed data is a header; information added after it is
+a trailer.
+
+For this example, the sequence towards transmission is:
+
+Application data -> TCP segment -> IPv4 packet -> Ethernet frame -> bits
+
+At the Physical layer, bits are represented as signals on the medium.
+At the receiving host, decapsulation processes and removes the relevant
+control information as data moves back up the stack.
+
+Different protocols produce different combinations. Tutorial 1 examines
+ICMP inside IPv4 inside Ethernet. That example does not contain a TCP
+segment. Always identify the protocols in the example before describing
+its encapsulation.

@@ -1,0 +1,60 @@
+[
+  {
+    "id": "W1-Q5",
+    "lessonId": "W1-L3",
+    "prompt": "For application data sent using TCP over IPv4 over Ethernet, which sequence describes encapsulation towards transmission?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Application data -> Ethernet frame -> IPv4 packet -> TCP segment -> bits",
+        "explanation": "Ethernet is the outer framing in this example. The TCP segment and IPv4 packet are formed before the Ethernet frame."
+      },
+      {
+        "id": "B",
+        "text": "Bits -> Ethernet frame -> IPv4 packet -> TCP segment -> application data",
+        "explanation": "This describes the receiving direction towards application data. The question asks about the sending direction."
+      },
+      {
+        "id": "C",
+        "text": "Application data -> IPv4 packet -> TCP segment -> Ethernet frame -> bits",
+        "explanation": "TCP and IPv4 are reversed. In this example, IPv4 carries the TCP segment inside its packet."
+      },
+      {
+        "id": "D",
+        "text": "Application data -> TCP segment -> IPv4 packet -> Ethernet frame -> bits",
+        "explanation": "Correct. TCP encapsulates the application data, IPv4 carries the TCP segment, and Ethernet carries the IPv4 packet before physical transmission."
+      }
+    ],
+    "correctOptionId": "D",
+    "source": "CAB222 Week 1, Lecture 1 Introduction to Networks_v1.pdf, pages 35, 40, 43, 46 and 49."
+  },
+  {
+    "id": "W1-Q6",
+    "lessonId": "W1-L3",
+    "prompt": "Which addressing fields are included in the Ethernet header at the Data Link layer?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Source and destination MAC addresses",
+        "explanation": "Correct. The Ethernet header includes source and destination MAC addresses for communication on the link."
+      },
+      {
+        "id": "B",
+        "text": "Source and destination IP addresses",
+        "explanation": "In this example, IP addresses are in the enclosed IPv4 header, not the Ethernet header."
+      },
+      {
+        "id": "C",
+        "text": "Source and destination TCP port numbers",
+        "explanation": "TCP port numbers are in the TCP header. They are not Ethernet addressing fields."
+      },
+      {
+        "id": "D",
+        "text": "The frame check sequence",
+        "explanation": "The frame check sequence is error-checking information in the Ethernet trailer. It does not identify the source or destination."
+      }
+    ],
+    "correctOptionId": "A",
+    "source": "CAB222 Week 1, Lecture 1 Introduction to Networks_v1.pdf, pages 14 and 46."
+  }
+]

@@ -1,3 +1,6 @@
 /target/
 /out/
-/.idea/workspace.xml
+/.idea/
+
+# Existing generated output from an unresolved build-directory expression
+/${project.build.directory}/

@@ -1,0 +1,14 @@
+ID: W1-L1
+Title: Network scope and devices
+Learning outcome: Distinguish LAN, WAN and MAN scopes; select a switch, router or access point for a simple scenario; explain how network hardware and software work together.
+Sources: CAB222 Week 1, Lecture 1 Introduction to Networks_v1.pdf, pages 10 and 18-27; supporting transcripts w1.p2.txt and w1.p3.txt.
+
+A computer network connects devices so they can exchange information and share resources. A local area network (LAN) covers a limited area, such as an office. A wide area network (WAN) connects networks across different locations, often through a communications provider. A metropolitan area network (MAN) links LANs across a city or similar region. Interconnected networks form an internetwork.
+
+Each device needs a network interface, commonly called a network interface card (NIC). It may be built in or added separately. A transmission medium carries signals between devices: examples include copper cable, optical fibre and radio waves.
+
+A switch connects devices within a LAN. A router forwards traffic between different networks. A wireless access point (AP) allows wireless devices to join a network. These names describe roles; one physical device can combine several roles.
+
+Software makes the hardware useful. A client requests a service, while a server provides resources or services. Protocols define the rules and formats used to communicate. A NIC driver passes data from networking software to the network interface hardware. When an application sends a message, software prepares it and the NIC transmits it as signals.
+
+Imagine an office with wired computers, a printer and wireless laptops. The wired devices connect through a switch; laptops join through an access point. A router connects the office network to another network. Local resource sharing can work without an Internet connection.

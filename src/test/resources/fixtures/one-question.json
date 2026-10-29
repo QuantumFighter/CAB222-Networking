@@ -1,0 +1,31 @@
+[
+  {
+    "id": "W1-Q3",
+    "lessonId": "W1-L2",
+    "prompt": "At which OSI layer does TCP provide reliable end-to-end delivery, flow control and error recovery?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Network Layer",
+        "explanation": "The Network Layer handles logical addressing and routing between networks. TCP's reliability mechanisms operate at a different layer."
+      },
+      {
+        "id": "B",
+        "text": "Data Link Layer",
+        "explanation": "The Data Link Layer handles frames and communication across a local link. The question concerns TCP's end-to-end communication."
+      },
+      {
+        "id": "C",
+        "text": "Transport Layer",
+        "explanation": "Correct. TCP operates at Layer 4 and provides reliable delivery through mechanisms including acknowledgements, retransmission and flow control."
+      },
+      {
+        "id": "D",
+        "text": "Session Layer",
+        "explanation": "The Session Layer manages communication sessions. TCP's delivery, flow control and recovery mechanisms belong to the Transport Layer."
+      }
+    ],
+    "correctOptionId": "C",
+    "source": "CAB222 Week 1, Lecture 1 Introduction to Networks_v1.pdf, page 40."
+  }
+]
