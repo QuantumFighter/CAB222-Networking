@@ -28,72 +28,41 @@ class QuestionLoaderTest {
 
     @Test
     void loadsBothOsiLessonQuestions() {
-        QuestionLoader loader = new QuestionLoader();
-
-        List<Question> questions =
-                loader.load("/week1/w1-l2-questions.json");
-
-        assertEquals(2, questions.size());
-
-        for (Question question : questions) {
-            assertEquals("W1-L2", question.lessonId());
-            assertEquals(4, question.options().size());
-
-            long distinctOptionIds = question.options().stream()
-                    .map(AnswerOption::id)
-                    .distinct()
-                    .count();
-
-            assertEquals(4L, distinctOptionIds);
-
-            long matchingOptions = question.options().stream()
-                    .filter(option ->
-                            option.id().equals(question.correctOptionId()))
-                    .count();
-
-            assertEquals(1L, matchingOptions);
-        }
+        assertLessonQuestions(
+                "/week1/w1-l2-questions.json",
+                "W1-L2"
+        );
     }
 
     @Test
     void loadsBothEncapsulationLessonQuestions() {
-        QuestionLoader loader = new QuestionLoader();
-
-        List<Question> questions =
-                loader.load("/week1/w1-l3-questions.json");
-
-        assertEquals(2, questions.size());
-
-        for (Question question : questions) {
-            assertEquals("W1-L3", question.lessonId());
-            assertEquals(4, question.options().size());
-            long distinctOptionIds = question.options().stream()
-                    .map(AnswerOption::id)
-                    .distinct()
-                    .count();
-
-            assertEquals(4L, distinctOptionIds);
-
-            long matchingOptions = question.options().stream()
-                    .filter(option ->
-                            option.id().equals(question.correctOptionId()))
-                    .count();
-
-            assertEquals(1L, matchingOptions);
-        }
+        assertLessonQuestions(
+                "/week1/w1-l3-questions.json",
+                "W1-L3"
+        );
     }
 
     @Test
     void loadsBothNetworkScopeLessonQuestions() {
+        assertLessonQuestions(
+                "/week1/w1-l1-questions.json",
+                "W1-L1"
+        );
+    }
+
+
+    private void assertLessonQuestions(
+            String resourcePath,
+            String expectedLessonId
+    ) {
         QuestionLoader loader = new QuestionLoader();
 
-        List<Question> questions =
-                loader.load("/week1/w1-l1-questions.json");
+        List<Question> questions = loader.load(resourcePath);
 
         assertEquals(2, questions.size());
 
         for (Question question : questions) {
-            assertEquals("W1-L1", question.lessonId());
+            assertEquals(expectedLessonId, question.lessonId());
             assertEquals(4, question.options().size());
 
             long distinctOptionIds = question.options().stream()
@@ -103,7 +72,6 @@ class QuestionLoaderTest {
 
             assertEquals(4L, distinctOptionIds);
 
-            // Existing check: exactly one option matches the correct-answer ID.
             long matchingOptions = question.options().stream()
                     .filter(option ->
                             option.id().equals(question.correctOptionId()))
@@ -113,3 +81,5 @@ class QuestionLoaderTest {
         }
     }
 }
+
+
