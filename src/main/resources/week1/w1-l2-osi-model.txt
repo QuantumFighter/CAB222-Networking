@@ -1,0 +1,40 @@
+ID: W1-L2
+Title: Understanding the OSI model
+Learning outcome: Name the seven OSI layers, associate functions with
+their layers, and explain why layering is useful.
+Source: CAB222 Week 1, Lecture 1 Introduction to Networks_v1.pdf,
+pages 32-33, 37-50, 53 and 55.
+
+The Open Systems Interconnection (OSI) model describes network
+communication using seven layers. Each layer groups related
+responsibilities and provides services to the layer above it.
+The model gives us a shared vocabulary for explaining communication
+and investigating faults.
+
+From the highest layer to the lowest:
+
+7. Application provides network services to applications, such as
+   exchanging web requests using HTTP.
+6. Presentation handles data representation, formatting and translation.
+5. Session manages ongoing conversations between communicating systems.
+4. Transport supports communication between applications. TCP operates
+   here and provides mechanisms including acknowledgements,
+   retransmission and flow control.
+3. Network handles logical addressing and routing between networks.
+   IP addresses belong here.
+2. Data Link handles frames and access to the local network medium.
+   Ethernet MAC addressing belongs here.
+1. Physical represents bits as signals, such as electrical pulses,
+   light pulses or radio waves.
+
+When sending information, we describe its processing down the layers
+towards physical transmission. At the receiver, processing moves back
+up towards the application.
+
+Layering helps us separate responsibilities. A damaged cable suggests
+a different investigation from an incorrect IP configuration or a
+misconfigured web application. The model guides our investigation,
+although a symptom alone does not prove which layer contains a fault.
+
+The OSI model is a reference framework. Real protocols and devices
+do not always fit exclusively into one layer.
