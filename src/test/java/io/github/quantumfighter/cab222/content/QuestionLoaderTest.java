@@ -16,7 +16,7 @@ class QuestionLoaderTest {
 
         List<Question> questions = loader.load("/fixtures/one-question.json");
 
-        assertEquals(1, questions.size());
+        assertEquals(2, questions.size());
 
         Question question = questions.getFirst();
 
