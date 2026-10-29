@@ -68,4 +68,26 @@ class QuestionLoaderTest {
             assertEquals(1L, matchingOptions);
         }
     }
+
+    @Test
+    void loadsBothNetworkScopeLessonQuestions() {
+        QuestionLoader loader = new QuestionLoader();
+
+        List<Question> questions =
+                loader.load("/week1/w1-l1-questions.json");
+
+        assertEquals(2, questions.size());
+
+        for (Question question : questions) {
+            assertEquals("W1-L1", question.lessonId());
+            assertEquals(4, question.options().size());
+
+            long matchingOptions = question.options().stream()
+                    .filter(option ->
+                            option.id().equals(question.correctOptionId()))
+                    .count();
+
+            assertEquals(1L, matchingOptions);
+        }
+    }
 }
