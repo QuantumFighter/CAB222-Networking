@@ -24,4 +24,22 @@ class ChallengeTest {
         );
         assertFalse(challenge.isCompleted());
     }
+    @Test
+    void submittingIncorrectAnswerExplainsTheMistake() {
+        Question question = new QuestionLoader()
+                .load("/fixtures/one-question.json")
+                .getFirst();
+
+        AnswerOption incorrectOption = question.options().getFirst();
+
+        Challenge challenge = new Challenge(question);
+
+        challenge.submit(incorrectOption.id());
+
+        assertEquals(
+                "Not yet\n" + incorrectOption.explanation(),
+                challenge.feedback()
+        );
+        assertFalse(challenge.isCompleted());
+    }
 }
