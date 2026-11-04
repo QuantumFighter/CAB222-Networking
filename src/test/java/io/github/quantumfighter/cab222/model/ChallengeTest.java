@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ChallengeTest {
 
@@ -41,5 +42,26 @@ class ChallengeTest {
                 challenge.feedback()
         );
         assertFalse(challenge.isCompleted());
+    }
+
+    @Test
+    void correctRetryCompletesChallengeAfterIncorrectAnswer() {
+        Question question = new QuestionLoader()
+                .load("/fixtures/one-question.json")
+                .getFirst();
+
+        Challenge challenge = new Challenge(question);
+
+        challenge.submit("A");
+        assertFalse(
+                challenge.isCompleted(),
+                "An incorrect answer should leave the challenge open"
+        );
+
+        challenge.submit("C");
+        assertTrue(
+                challenge.isCompleted(),
+                "A correct retry should complete the challenge"
+        );
     }
 }
