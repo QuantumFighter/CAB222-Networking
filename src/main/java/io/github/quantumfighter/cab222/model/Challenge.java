@@ -8,6 +8,7 @@ public class Challenge {
 
     private final Question question;
     private String feedback = "";
+    private boolean completed;
 
     public Challenge(Question question) {
         this.question = question;
@@ -26,9 +27,14 @@ public class Challenge {
                         "Unknown answer option: " + optionId
                 ));
 
-        if (!question.correctOptionId().equals(selectedOption.id())) {
-            feedback = "Not yet\n" + selectedOption.explanation();
+        if (question.correctOptionId().equals(selectedOption.id())) {
+            feedback = "Correct\n" + selectedOption.explanation();
+            completed = true;
+            return;
         }
+
+        feedback = "Not yet\n" + selectedOption.explanation();
+
     }
 
     public String feedback() {
@@ -36,6 +42,6 @@ public class Challenge {
     }
 
     public boolean isCompleted() {
-        return false;
+        return completed;
     }
 }
