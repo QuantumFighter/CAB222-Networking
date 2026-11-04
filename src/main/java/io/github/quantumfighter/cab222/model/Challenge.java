@@ -15,6 +15,9 @@ public class Challenge {
     }
 
     public void submit(String optionId) {
+        if (completed) {
+            return;
+        }
         if (optionId == null) {
             feedback = "Choose an answer first";
             return;
