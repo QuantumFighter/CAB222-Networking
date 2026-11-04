@@ -1,12 +1,12 @@
 package io.github.quantumfighter.cab222.ui;
 
 import io.github.quantumfighter.cab222.model.Lesson;
+import io.github.quantumfighter.cab222.model.Question;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -22,10 +22,10 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
- * Displays lesson choices, a lesson reader and a challenge placeholder.
+ * Displays lesson choices, a lesson reader and a challenge panel.
  *
  * <p>This view manages presentation only. It receives loaded lessons
- * and reports selection events without knowing their resource locations.
+ * and questions and reports selection events.
  *
  * <p>Create and use this class on Swing's event dispatch thread.
  */
@@ -41,6 +41,7 @@ public class LearningView {
             new JList<>(lessonModel);
 
     private final JTextArea reader = new JTextArea();
+    private final ChallengePanel challengePanel = new ChallengePanel();
 
     private Consumer<Lesson> lessonSelectionHandler = _ -> {
     };
@@ -64,7 +65,6 @@ public class LearningView {
         );
         lessonReader.setMinimumSize(new Dimension(250, 0));
 
-        JPanel challengePanel = createChallengePanel();
         challengePanel.setMinimumSize(new Dimension(160, 0));
 
         JSplitPane splitPane = new JSplitPane(
@@ -131,6 +131,15 @@ public class LearningView {
     }
 
     /**
+     * Displays the question and its options in the challenge panel.
+     *
+     * @param question the question to display, or {@code null} to clear it
+     */
+    public void showQuestion(Question question) {
+        challengePanel.showQuestion(question);
+    }
+
+    /**
      * Centres and shows the window.
      */
     public void open() {
@@ -163,7 +172,6 @@ public class LearningView {
             }
 
             Lesson selectedLesson = lessonList.getSelectedValue();
-
             if (selectedLesson != null) {
                 lessonSelectionHandler.accept(selectedLesson);
             }
@@ -178,24 +186,5 @@ public class LearningView {
                 new Font(Font.SANS_SERIF, Font.PLAIN, 16)
         );
         reader.setMargin(new Insets(12, 12, 12, 12));
-    }
-
-    private JPanel createChallengePanel() {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(
-                BorderFactory.createTitledBorder("Challenge")
-        );
-
-        JLabel placeholder = new JLabel(
-                "<html>Read the lesson first.<br>"
-                        + "Practice questions will appear here.</html>"
-        );
-        placeholder.setBorder(
-                BorderFactory.createEmptyBorder(12, 12, 12, 12)
-        );
-
-        panel.add(placeholder, BorderLayout.NORTH);
-
-        return panel;
     }
 }

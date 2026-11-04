@@ -4,6 +4,7 @@ import io.github.quantumfighter.cab222.content.LessonLoader;
 import io.github.quantumfighter.cab222.content.WeekOneContent;
 import io.github.quantumfighter.cab222.controller.LearningController;
 import io.github.quantumfighter.cab222.model.Lesson;
+import io.github.quantumfighter.cab222.model.Question;
 import io.github.quantumfighter.cab222.ui.LearningView;
 
 import javax.swing.SwingUtilities;
@@ -21,13 +22,13 @@ public class App {
         LessonLoader loader = new LessonLoader();
         WeekOneContent content = new WeekOneContent(loader);
         List<Lesson> lessons = content.lessons();
+        Question firstQuestion = content.firstChallengeQuestion();
 
         SwingUtilities.invokeLater(() -> {
             LearningView view = new LearningView();
 
             LearningController controller =
-                    new LearningController(lessons, view);
-
+                    new LearningController(lessons, firstQuestion, view);
             controller.start();
         });
     }
