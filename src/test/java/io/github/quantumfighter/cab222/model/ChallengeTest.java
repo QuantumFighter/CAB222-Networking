@@ -64,4 +64,21 @@ class ChallengeTest {
                 "A correct retry should complete the challenge"
         );
     }
+    @Test
+    void submittingAfterCompletionPreservesCorrectFeedback() {
+        Question question = new QuestionLoader()
+                .load("/fixtures/one-question.json")
+                .getFirst();
+
+        Challenge challenge = new Challenge(question);
+
+        challenge.submit("C");
+        String completedFeedback = challenge.feedback();
+        assertTrue(completedFeedback.startsWith("Correct\n"));
+
+        challenge.submit("A");
+
+        assertEquals(completedFeedback, challenge.feedback());
+        assertTrue(challenge.isCompleted());
+    }
 }
