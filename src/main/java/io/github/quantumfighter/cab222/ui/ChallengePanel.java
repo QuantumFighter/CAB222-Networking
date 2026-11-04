@@ -3,19 +3,27 @@ package io.github.quantumfighter.cab222.ui;
 import io.github.quantumfighter.cab222.model.AnswerOption;
 import io.github.quantumfighter.cab222.model.Question;
 
+import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.util.Collections;
+import java.util.function.Consumer;
 
 final class ChallengePanel extends JPanel {
 
     private final JTextArea prompt = new JTextArea(6, 0);
     private final JPanel options = new JPanel(new GridLayout(0, 1, 0, 4));
+    private final JButton submitButton = new JButton("Submit");
+    private final JTextArea feedback = new JTextArea();
+
+    private ButtonGroup answers = new ButtonGroup();
 
     ChallengePanel() {
         super(new BorderLayout());
@@ -25,20 +33,28 @@ final class ChallengePanel extends JPanel {
         prompt.setLineWrap(true);
         prompt.setWrapStyleWord(true);
 
+        submitButton.setEnabled(false);
+        feedback.setEditable(false);
+        feedback.setLineWrap(true);
+        feedback.setWrapStyleWord(true);
+
         JPanel questionBody = new JPanel(new BorderLayout(0, 8));
         questionBody.add(new JScrollPane(prompt), BorderLayout.NORTH);
         questionBody.add(options, BorderLayout.CENTER);
+        questionBody.add(submitButton, BorderLayout.SOUTH);
+
         add(questionBody, BorderLayout.NORTH);
+        add(new JScrollPane(feedback), BorderLayout.CENTER);
     }
 
     void showQuestion(Question question) {
         options.removeAll();
+        answers = new ButtonGroup();
 
         if (question == null) {
             prompt.setText("No challenge available for this lesson.");
         } else {
             prompt.setText(question.prompt());
-            ButtonGroup answers = new ButtonGroup();
 
             for (AnswerOption option : question.options()) {
                 JRadioButton button = new JRadioButton(
@@ -51,7 +67,35 @@ final class ChallengePanel extends JPanel {
         }
 
         prompt.setCaretPosition(0);
+        showFeedback("", null);
         options.revalidate();
         options.repaint();
+    }
+
+    void onAnswerSubmitted(Consumer<String> handler) {
+        submitButton.addActionListener(_ -> {
+            var selected = answers.getSelection();
+            String optionId = selected == null
+                    ? null
+                    : selected.getActionCommand();
+
+            handler.accept(optionId);
+        });
+    }
+
+    void showFeedback(String message, String lockedOptionId) {
+        feedback.setText(message);
+        feedback.setCaretPosition(0);
+
+        boolean locked = lockedOptionId != null;
+
+        for (AbstractButton button : Collections.list(answers.getElements())) {
+            if (locked && lockedOptionId.equals(button.getActionCommand())) {
+                button.setSelected(true);
+            }
+            button.setEnabled(!locked);
+        }
+
+        submitButton.setEnabled(answers.getButtonCount() > 0 && !locked);
     }
 }

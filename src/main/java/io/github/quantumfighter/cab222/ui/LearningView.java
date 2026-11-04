@@ -24,9 +24,6 @@ import java.util.function.Consumer;
 /**
  * Displays lesson choices, a lesson reader and a challenge panel.
  *
- * <p>This view manages presentation only. It receives loaded lessons
- * and questions and reports selection events.
- *
  * <p>Create and use this class on Swing's event dispatch thread.
  */
 public class LearningView {
@@ -110,6 +107,16 @@ public class LearningView {
     }
 
     /**
+     * Registers the action invoked when the learner clicks Submit.
+     *
+     * @param handler the action receiving the selected option ID,
+     *                or {@code null} when no option is selected
+     */
+    public void onAnswerSubmitted(Consumer<String> handler) {
+        challengePanel.onAnswerSubmitted(handler);
+    }
+
+    /**
      * Selects the first lesson, notifying the selection handler.
      *
      * <p>Does nothing when there are no lessons.
@@ -137,6 +144,17 @@ public class LearningView {
      */
     public void showQuestion(Question question) {
         challengePanel.showQuestion(question);
+    }
+
+    /**
+     * Displays feedback and applies the completed answer's lock state.
+     *
+     * @param message the feedback to display
+     * @param lockedOptionId the completed answer's ID, or {@code null}
+     *                       while the question can still be answered
+     */
+    public void showChallengeFeedback(String message, String lockedOptionId) {
+        challengePanel.showFeedback(message, lockedOptionId);
     }
 
     /**
