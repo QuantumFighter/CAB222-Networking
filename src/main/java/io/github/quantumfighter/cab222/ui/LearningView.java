@@ -1,12 +1,12 @@
 package io.github.quantumfighter.cab222.ui;
 
 import io.github.quantumfighter.cab222.model.Lesson;
+import io.github.quantumfighter.cab222.model.Question;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -22,10 +22,7 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
- * Displays lesson choices, a lesson reader and a challenge placeholder.
- *
- * <p>This view manages presentation only. It receives loaded lessons
- * and reports selection events without knowing their resource locations.
+ * Displays lesson choices, a lesson reader and a challenge panel.
  *
  * <p>Create and use this class on Swing's event dispatch thread.
  */
@@ -41,6 +38,7 @@ public class LearningView {
             new JList<>(lessonModel);
 
     private final JTextArea reader = new JTextArea();
+    private final ChallengePanel challengePanel = new ChallengePanel();
 
     private Consumer<Lesson> lessonSelectionHandler = _ -> {
     };
@@ -64,7 +62,6 @@ public class LearningView {
         );
         lessonReader.setMinimumSize(new Dimension(250, 0));
 
-        JPanel challengePanel = createChallengePanel();
         challengePanel.setMinimumSize(new Dimension(160, 0));
 
         JSplitPane splitPane = new JSplitPane(
@@ -110,6 +107,16 @@ public class LearningView {
     }
 
     /**
+     * Registers the action invoked when the learner clicks Submit.
+     *
+     * @param handler the action receiving the selected option ID,
+     *                or {@code null} when no option is selected
+     */
+    public void onAnswerSubmitted(Consumer<String> handler) {
+        challengePanel.onAnswerSubmitted(handler);
+    }
+
+    /**
      * Selects the first lesson, notifying the selection handler.
      *
      * <p>Does nothing when there are no lessons.
@@ -128,6 +135,26 @@ public class LearningView {
     public void showLesson(Lesson lesson) {
         reader.setText(lesson.text());
         reader.setCaretPosition(0);
+    }
+
+    /**
+     * Displays the question and its options in the challenge panel.
+     *
+     * @param question the question to display, or {@code null} to clear it
+     */
+    public void showQuestion(Question question) {
+        challengePanel.showQuestion(question);
+    }
+
+    /**
+     * Displays feedback and applies the completed answer's lock state.
+     *
+     * @param message the feedback to display
+     * @param lockedOptionId the completed answer's ID, or {@code null}
+     *                       while the question can still be answered
+     */
+    public void showChallengeFeedback(String message, String lockedOptionId) {
+        challengePanel.showFeedback(message, lockedOptionId);
     }
 
     /**
@@ -163,7 +190,6 @@ public class LearningView {
             }
 
             Lesson selectedLesson = lessonList.getSelectedValue();
-
             if (selectedLesson != null) {
                 lessonSelectionHandler.accept(selectedLesson);
             }
@@ -178,24 +204,5 @@ public class LearningView {
                 new Font(Font.SANS_SERIF, Font.PLAIN, 16)
         );
         reader.setMargin(new Insets(12, 12, 12, 12));
-    }
-
-    private JPanel createChallengePanel() {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(
-                BorderFactory.createTitledBorder("Challenge")
-        );
-
-        JLabel placeholder = new JLabel(
-                "<html>Read the lesson first.<br>"
-                        + "Practice questions will appear here.</html>"
-        );
-        placeholder.setBorder(
-                BorderFactory.createEmptyBorder(12, 12, 12, 12)
-        );
-
-        panel.add(placeholder, BorderLayout.NORTH);
-
-        return panel;
     }
 }

@@ -6,7 +6,7 @@ import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 
 /**
- * Loads complete lesson test
+ * Loads complete lesson text
  */
 public class LessonLoader {
     /**
