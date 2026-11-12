@@ -1,9 +1,15 @@
 package io.github.quantumfighter.cab222.model;
 
+import io.github.quantumfighter.cab222.content.LessonLoader;
 import io.github.quantumfighter.cab222.content.QuestionLoader;
+import io.github.quantumfighter.cab222.content.WeekOneContent;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class UnitSessionTest {
 
@@ -22,5 +28,47 @@ class UnitSessionTest {
 
         session.challengeFor("W1-Q1").submit("B");
         assertEquals(1, session.completedCount());
+    }
+
+    @Test
+    void completesOnlyAfterAllSixQuestionsAreCorrect() {
+        List<Question> questions = new WeekOneContent(new LessonLoader()).questions();
+        assertEquals(
+                List.of("W1-Q1", "W1-Q2", "W1-Q3", "W1-Q4", "W1-Q5", "W1-Q6"),
+                questions.stream().map(Question::id).toList()
+        );
+
+        UnitSession session = new UnitSession(questions);
+
+        for (Question question : questions.subList(0, 5)) {
+            session.challengeFor(question.id()).submit(question.correctOptionId());
+        }
+
+        assertEquals(5, session.completedCount());
+        assertFalse(session.isComplete());
+
+        Question last = questions.getLast();
+        session.challengeFor(last.id()).submit(last.correctOptionId());
+
+        assertEquals(6, session.completedCount());
+        assertTrue(session.isComplete());
+    }
+
+    @Test
+    void resetClearsCorrectAndIncorrectAttempts() {
+        List<Question> questions = new WeekOneContent(new LessonLoader()).questions();
+        UnitSession session = new UnitSession(questions);
+
+        session.challengeFor("W1-Q1").submit("B");
+        session.challengeFor("W1-Q2").submit("A");
+        assertEquals(1, session.completedCount());
+        assertTrue(session.challengeFor("W1-Q2").feedback().startsWith("Not yet"));
+
+        session.reset();
+
+        assertEquals(0, session.completedCount());
+        assertFalse(session.isComplete());
+        assertEquals("", session.challengeFor("W1-Q1").feedback());
+        assertEquals("", session.challengeFor("W1-Q2").feedback());
     }
 }

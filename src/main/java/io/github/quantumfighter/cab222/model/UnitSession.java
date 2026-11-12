@@ -9,10 +9,12 @@ import java.util.Map;
  */
 public class UnitSession {
 
+    private final List<Question> questions;
     private final Map<String, Challenge> challenges = new LinkedHashMap<>();
 
     public UnitSession(List<Question> questions) {
-        for (Question question : questions) {
+        this.questions = List.copyOf(questions);
+        for (Question question : this.questions) {
             if (challenges.containsKey(question.id())) {
                 throw new IllegalArgumentException(
                         "Duplicate question ID: " + question.id()
@@ -37,5 +39,23 @@ public class UnitSession {
             }
         }
         return completed;
+    }
+
+    /**
+     * Checks whether every question in a nonempty unit is complete.
+     *
+     * @return whether the learner has completed the unit
+     */
+    public boolean isComplete() {
+        return !challenges.isEmpty() && completedCount() == challenges.size();
+    }
+
+    /**
+     * Replaces all attempts with fresh challenges for the same questions.
+     */
+    public void reset() {
+        for (Question question : questions) {
+            challenges.put(question.id(), new Challenge(question));
+        }
     }
 }
