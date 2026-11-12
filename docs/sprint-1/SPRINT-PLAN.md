@@ -79,6 +79,26 @@ Demonstrate opening the app, reading a lesson, submitting an incorrect answer, c
 
 Record actual versus estimated effort, one thing that helped, one obstacle, and one specific improvement for the next sprint. A working feature demonstrates product progress; explaining a fresh example demonstrates learning progress.
 
+### Recorded Sprint 1 retrospective
+
+- **Effort estimate from Git history.** The sprint plan estimated 9.5 task
+  hours. Git records from 26 October to 12 November 2026 show about 3 hours
+  52 minutes of elapsed time within 13 activity windows across six days,
+  through the merge of S1-05. This groups commits and merges separated by
+  at most 30 minutes and measures from the first to the last event in each
+  window. It includes CI work added during the sprint. The records do not
+  establish actual hands-on time for study, debugging, or work before
+  and after recorded events.
+- **Practice to keep.** Write a failing test before changing behavior and
+  run the required Maven check on each PR. The
+  [CI demonstration](https://github.com/QuantumFighter/CAB222-Networking/pull/10)
+  confirmed that an intentionally failing assertion fails the PR check.
+- **Obstacle.** The first S1-05 progress commit landed on local `main`.
+  Moving it onto the feature branch kept the work in the
+  [S1-05 pull request](https://github.com/QuantumFighter/CAB222-Networking/pull/13).
+- **Change for next sprint.** Create the feature branch from the updated
+  `main` before editing and check the active branch before the first commit.
+
 ## Remaining Week 1 backlog
 
 Keep these outside the first sprint: Internet history; Internet, intranet and extranet exercises; TCP/IP to OSI mapping; deeper communication component exercises; the complete Wireshark tutorial; and a guided ICMP request/reply packet inspection task. Also defer saved progress, XP, achievements, accounts, an AI tutor, a simulated terminal and real packet parsing.
