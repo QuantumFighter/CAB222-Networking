@@ -3,10 +3,11 @@ package io.github.quantumfighter.cab222.content;
 import io.github.quantumfighter.cab222.model.Lesson;
 import io.github.quantumfighter.cab222.model.Question;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Provides the Week 1 lessons and the first challenge question.
+ * Provides the Week 1 lessons and challenge questions.
  *
  * <p>Resource locations are kept here so callers work with lessons
  * and questions rather than filenames.
@@ -56,13 +57,18 @@ public class WeekOneContent {
     }
 
     /**
-     * Loads the first question for the network scope and devices lesson.
+     * Loads the Week 1 challenge questions in lesson and question order.
      *
-     * @return the first challenge question
+     * @return an unmodifiable list of questions in teaching order
      */
-    public Question firstChallengeQuestion() {
-        return new QuestionLoader()
-                .load("/week1/w1-l1-questions.json")
-                .getFirst();
+    public List<Question> questions() {
+        QuestionLoader loader = new QuestionLoader();
+        List<Question> questions = new ArrayList<>();
+
+        questions.addAll(loader.load("/week1/w1-l1-questions.json"));
+        questions.addAll(loader.load("/week1/w1-l2-questions.json"));
+        questions.addAll(loader.load("/week1/w1-l3-questions.json"));
+
+        return List.copyOf(questions);
     }
 }

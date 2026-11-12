@@ -3,36 +3,35 @@ package io.github.quantumfighter.cab222.controller;
 import io.github.quantumfighter.cab222.model.Challenge;
 import io.github.quantumfighter.cab222.model.Lesson;
 import io.github.quantumfighter.cab222.model.Question;
+import io.github.quantumfighter.cab222.model.UnitSession;
 import io.github.quantumfighter.cab222.ui.LearningView;
 
 import java.util.List;
 import java.util.Objects;
 
 /**
- * Coordinates lesson selection, answer submissions and challenge feedback.
+ * Connects lesson navigation and answer events to the current unit session.
  */
 public class LearningController {
 
     private final List<Lesson> lessons;
-    private final Question firstQuestion;
-    private final Challenge challenge;
+    private final UnitSession session;
     private final LearningView view;
 
     /**
-     * Connects the available lessons and first challenge question to the view.
+     * Connects the available lessons and unit session to the view.
      *
      * @param lessons the lessons in teaching order
-     * @param firstQuestion the question to show for its matching lesson
+     * @param session the current run through the unit's questions
      * @param view the interface used to display the lesson and question
      */
     public LearningController(
             List<Lesson> lessons,
-            Question firstQuestion,
+            UnitSession session,
             LearningView view
     ) {
         this.lessons = List.copyOf(lessons);
-        this.firstQuestion = Objects.requireNonNull(firstQuestion);
-        this.challenge = new Challenge(this.firstQuestion);
+        this.session = Objects.requireNonNull(session);
         this.view = Objects.requireNonNull(view);
     }
 
@@ -42,32 +41,78 @@ public class LearningController {
      * <p>Call once on Swing's event dispatch thread.
      */
     public void start() {
-        view.onLessonSelected(lesson -> {
-            view.showLesson(lesson);
-
-            if (lesson.id().equals(firstQuestion.lessonId())) {
-                view.showQuestion(firstQuestion);
-                refreshChallengeFeedback();
-            } else {
-                view.showQuestion(null);
-            }
-        });
-
-        view.onAnswerSubmitted(optionId -> {
-            challenge.submit(optionId);
-            refreshChallengeFeedback();
-        });
-
         view.setLessons(lessons);
-        view.selectFirstLesson();
+        view.onLessonSelected(this::selectLesson);
+        view.onAnswerSubmitted(this::submitAnswer);
+        view.onNext(this::advance);
+        view.onNewSession(this::resetSession);
+        showCurrentLesson();
         view.open();
     }
 
-    private void refreshChallengeFeedback() {
-        String lockedOptionId = challenge.isCompleted()
-                ? firstQuestion.correctOptionId()
-                : null;
+    private void selectLesson(Lesson lesson) {
+        session.selectLesson(lesson.id());
+        view.showLesson(lesson);
+        showCurrentQuestion();
+    }
 
-        view.showChallengeFeedback(challenge.feedback(), lockedOptionId);
+    private void submitAnswer(String optionId) {
+        Question question = session.currentQuestion();
+        if (question != null) {
+            session.challengeFor(question.id()).submit(optionId);
+            refreshQuestionStatus();
+        }
+    }
+
+    private void advance() {
+        if (!session.canAdvance()) {
+            return;
+        }
+
+        String previousLessonId = session.currentQuestion().lessonId();
+        session.advance();
+        if (previousLessonId.equals(session.currentQuestion().lessonId())) {
+            showCurrentQuestion();
+        } else {
+            showCurrentLesson();
+        }
+    }
+
+    private void resetSession() {
+        session.reset();
+        showCurrentLesson();
+    }
+
+    private void showCurrentLesson() {
+        if (!lessons.isEmpty()) {
+            Question question = session.currentQuestion();
+            Lesson lesson = question == null
+                    ? lessons.getFirst()
+                    : lessons.stream()
+                            .filter(candidate -> candidate.id().equals(question.lessonId()))
+                            .findFirst()
+                            .orElseThrow();
+
+            view.selectLesson(lesson);
+            view.showLesson(lesson);
+        }
+        showCurrentQuestion();
+    }
+
+    private void showCurrentQuestion() {
+        view.showQuestion(session.currentQuestion());
+        refreshQuestionStatus();
+    }
+
+    private void refreshQuestionStatus() {
+        Question question = session.currentQuestion();
+        if (question != null) {
+            Challenge challenge = session.challengeFor(question.id());
+            String lockedOptionId = challenge.isCompleted() ? question.correctOptionId() : null;
+            view.showChallengeFeedback(challenge.feedback(), lockedOptionId);
+        }
+
+        view.setNextEnabled(session.canAdvance());
+        view.showProgress(session.completedCount(), session.totalQuestions(), session.isComplete());
     }
 }

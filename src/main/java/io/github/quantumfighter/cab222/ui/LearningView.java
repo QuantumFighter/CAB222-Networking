@@ -4,9 +4,11 @@ import io.github.quantumfighter.cab222.model.Lesson;
 import io.github.quantumfighter.cab222.model.Question;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -15,6 +17,7 @@ import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Insets;
 import java.util.List;
@@ -39,7 +42,11 @@ public class LearningView {
 
     private final JTextArea reader = new JTextArea();
     private final ChallengePanel challengePanel = new ChallengePanel();
+    private final JLabel progressLabel = new JLabel();
+    private final JLabel completionLabel = new JLabel("Week 1 foundations complete");
+    private final JButton newSessionButton = new JButton("New session");
 
+    private boolean updatingLessonSelection;
     private Consumer<Lesson> lessonSelectionHandler = _ -> {
     };
 
@@ -62,7 +69,7 @@ public class LearningView {
         );
         lessonReader.setMinimumSize(new Dimension(250, 0));
 
-        challengePanel.setMinimumSize(new Dimension(160, 0));
+        challengePanel.setMinimumSize(new Dimension(250, 0));
 
         JSplitPane splitPane = new JSplitPane(
                 JSplitPane.HORIZONTAL_SPLIT,
@@ -78,6 +85,7 @@ public class LearningView {
         );
         content.add(lessonChoices, BorderLayout.WEST);
         content.add(splitPane, BorderLayout.CENTER);
+        content.add(createFooter(), BorderLayout.SOUTH);
 
         window.setContentPane(content);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -117,14 +125,34 @@ public class LearningView {
     }
 
     /**
-     * Selects the first lesson, notifying the selection handler.
+     * Highlights the lesson for the current question during Next or New session.
      *
-     * <p>Does nothing when there are no lessons.
+     * @param lesson the lesson to highlight
      */
-    public void selectFirstLesson() {
-        if (!lessonModel.isEmpty()) {
-            lessonList.setSelectedIndex(0);
+    public void selectLesson(Lesson lesson) {
+        updatingLessonSelection = true;
+        try {
+            lessonList.setSelectedValue(lesson, true);
+        } finally {
+            updatingLessonSelection = false;
         }
+    }
+
+    public void onNext(Runnable handler) {
+        challengePanel.onNext(handler);
+    }
+
+    public void onNewSession(Runnable handler) {
+        newSessionButton.addActionListener(_ -> handler.run());
+    }
+
+    public void setNextEnabled(boolean enabled) {
+        challengePanel.setNextEnabled(enabled);
+    }
+
+    public void showProgress(int completed, int total, boolean complete) {
+        progressLabel.setText("Questions completed: " + completed + "/" + total);
+        completionLabel.setVisible(complete);
     }
 
     /**
@@ -165,6 +193,19 @@ public class LearningView {
         window.setVisible(true);
     }
 
+    private JPanel createFooter() {
+        JPanel status = new JPanel(new FlowLayout(FlowLayout.LEADING, 12, 0));
+        status.add(progressLabel);
+        status.add(completionLabel);
+        completionLabel.setVisible(false);
+
+        JPanel footer = new JPanel(new BorderLayout());
+        footer.setBorder(BorderFactory.createEmptyBorder(8, 0, 0, 0));
+        footer.add(status, BorderLayout.CENTER);
+        footer.add(newSessionButton, BorderLayout.EAST);
+        return footer;
+    }
+
     private void configureLessonList() {
         lessonList.setSelectionMode(
                 ListSelectionModel.SINGLE_SELECTION
@@ -185,7 +226,7 @@ public class LearningView {
         );
 
         lessonList.addListSelectionListener(event -> {
-            if (event.getValueIsAdjusting()) {
+            if (event.getValueIsAdjusting() || updatingLessonSelection) {
                 return;
             }
 

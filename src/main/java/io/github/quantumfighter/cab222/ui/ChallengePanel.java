@@ -21,6 +21,7 @@ final class ChallengePanel extends JPanel {
     private final JTextArea prompt = new JTextArea(6, 0);
     private final JPanel options = new JPanel(new GridLayout(0, 1, 0, 4));
     private final JButton submitButton = new JButton("Submit");
+    private final JButton nextButton = new JButton("Next");
     private final JTextArea feedback = new JTextArea();
 
     private ButtonGroup answers = new ButtonGroup();
@@ -34,6 +35,7 @@ final class ChallengePanel extends JPanel {
         prompt.setWrapStyleWord(true);
 
         submitButton.setEnabled(false);
+        nextButton.setEnabled(false);
         feedback.setEditable(false);
         feedback.setLineWrap(true);
         feedback.setWrapStyleWord(true);
@@ -41,7 +43,11 @@ final class ChallengePanel extends JPanel {
         JPanel questionBody = new JPanel(new BorderLayout(0, 8));
         questionBody.add(new JScrollPane(prompt), BorderLayout.NORTH);
         questionBody.add(options, BorderLayout.CENTER);
-        questionBody.add(submitButton, BorderLayout.SOUTH);
+
+        JPanel actions = new JPanel(new GridLayout(1, 2, 8, 0));
+        actions.add(submitButton);
+        actions.add(nextButton);
+        questionBody.add(actions, BorderLayout.SOUTH);
 
         add(questionBody, BorderLayout.NORTH);
         add(new JScrollPane(feedback), BorderLayout.CENTER);
@@ -57,9 +63,14 @@ final class ChallengePanel extends JPanel {
             prompt.setText(question.prompt());
 
             for (AnswerOption option : question.options()) {
+                String label = option.id() + ". " + option.text();
+                String htmlLabel = label.replace("&", "&amp;")
+                        .replace("<", "&lt;")
+                        .replace(">", "&gt;");
                 JRadioButton button = new JRadioButton(
-                        option.id() + ". " + option.text()
+                        "<html><div style=\"width: 160px\">" + htmlLabel + "</div></html>"
                 );
+                button.getAccessibleContext().setAccessibleName(label);
                 button.setActionCommand(option.id());
                 answers.add(button);
                 options.add(button);
@@ -81,6 +92,14 @@ final class ChallengePanel extends JPanel {
 
             handler.accept(optionId);
         });
+    }
+
+    void onNext(Runnable handler) {
+        nextButton.addActionListener(_ -> handler.run());
+    }
+
+    void setNextEnabled(boolean enabled) {
+        nextButton.setEnabled(enabled);
     }
 
     void showFeedback(String message, String lockedOptionId) {
