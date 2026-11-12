@@ -40,6 +40,12 @@ public class Challenge {
 
     }
 
+    void clearIncompleteFeedback() {
+        if (!completed) {
+            feedback = "";
+        }
+    }
+
     public String feedback() {
         return feedback;
     }

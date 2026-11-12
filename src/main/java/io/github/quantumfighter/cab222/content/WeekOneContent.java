@@ -57,15 +57,6 @@ public class WeekOneContent {
     }
 
     /**
-     * Loads the first question for the network scope and devices lesson.
-     *
-     * @return the first challenge question
-     */
-    public Question firstChallengeQuestion() {
-        return questions().getFirst();
-    }
-
-    /**
      * Loads the Week 1 challenge questions in lesson and question order.
      *
      * @return an unmodifiable list of questions in teaching order
